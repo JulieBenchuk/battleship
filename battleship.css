@@ -12,7 +12,8 @@ div#messageArea {
     position: absolute;
     top: 0px;
     left: 0px;
-    color: aquamarine;
+    color: rgb(189, 15, 15);
+    font-size: 30px;
 }
 table {
     position: absolute;
