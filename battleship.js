@@ -48,6 +48,28 @@ var view = {
     }
 };
 
+var model = {
+    boardSize: 7,
+    numShips: 3,
+    shipLength: 3,
+    shipsSunk: 0,
+    ships: [{locations: ["", "", ""], hits: ["", "", ""]},
+            {locations: ["", "", ""], hits: ["", "", ""]},
+            {locations: ["", "", ""], hits: ["", "", ""]}],
+    fire: function(guess) {
+        for (var i = 0; i < this.numShips; i++) {
+            var ship = this.ships[i];
+            locations = ship.locations;
+            var index = locations.indexOf(guess);
+            if(index >= 0) {
+                ship.hits[index] = "hit";
+                return true;
+            }
+        }
+        return false;
+    }
+}
+
 view.displayHit("34");
 view.displayHit("12");
 view.displayHit("26");
