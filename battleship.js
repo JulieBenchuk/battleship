@@ -1,16 +1,16 @@
-// var randomLoc;
-// var randomLoc = Math.floor(Math.random()*5);
-// var location1 = randomLoc;
-// var location2 = location1+1;
-// var location3 = location2+1;
+var randomLoc;
+var randomLoc = Math.floor(Math.random()*5);
+var location1 = randomLoc;
+var location2 = location1+1;
+var location3 = location2+1;
 
-// // number of current try
-// var guess;
-// // amount of hits on target
-// var hits = 0;
-// // amount of tries
-// var guesses = 0;
-// var isSunk = false;
+// number of current try
+var guess;
+// amount of hits on target
+var hits = 0;
+// amount of tries
+var guesses = 0;
+var isSunk = false;
 
 // while (isSunk==false) {
 //     guess = prompt ("Ready, aim, fire! (enter a number from 0-6):");
@@ -30,8 +30,8 @@
 //         }
 //     }
 // }
-// var stats = "You took "+guesses+" guesses to sink the battleship, " + "which means your shooting accuracy was "+ (3/guesses);
-// alert (stats);
+var stats = "You took "+guesses+" guesses to sink the battleship, " + "which means your shooting accuracy was "+ (3/guesses);
+alert (stats);
 
 var view = {
     displayMessage: function(msg) {
@@ -59,14 +59,51 @@ var model = {
     fire: function(guess) {
         for (var i = 0; i < this.numShips; i++) {
             var ship = this.ships[i];
-            locations = ship.locations;
-            var index = locations.indexOf(guess);
+            var index = ship.locations.indexOf(guess);
             if(index >= 0) {
                 ship.hits[index] = "hit";
+                view.displayHit(guess);
+                view.displayMessage("HIT!");
+                if (this.isSunk(ship)) {
+                    view.displayMessage("You sank my battleship!");
+                    this.shipsSunk++;
+                }
                 return true;
             }
         }
+        view.displayMiss(guess);
+        view.displayMessage("You missed!");
         return false;
+    },
+    isSunk: function(ship) {
+        for (var i = 0; i<this.shipLength; i++) {
+            if (ship.hits[i] !== "hit") {
+                return false;
+            }
+        }
+        return true;
+    }
+}
+
+var controller = {
+    guesses: 0,
+    processGuess: function(guess) {
+        var alphabet = ["A", "B", "C", "D", "E", "F", "G"];
+        if (guess ===null || guess.length !== 2) {
+            alert("Ooops, a letter and a number must to be on the board.");
+        } else {
+            firstChar = guess.charAt(0);
+            var row = alphabet.indexOf(firstChar);
+            var column = guess.charAt(1);
+            if (isNaN(row) || isNaN(column)) {
+                alert("Ooops, wrong input :(");
+            } else if (row < 0 || row >= model.boardSize || column < 0 || column >= model.boardSize) {
+                alert("oops, it's outside the table.")
+            } else {
+                return row + column;
+            }
+        }
+        return null;
     }
 }
 
@@ -77,7 +114,6 @@ view.displayMiss("00");
 view.displayMiss("55");
 view.displayMiss("25");
 
-view.displayMessage("Hey, looser!");
 
 
 
