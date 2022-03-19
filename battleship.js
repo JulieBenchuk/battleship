@@ -53,7 +53,7 @@ var model = {
     numShips: 3,
     shipLength: 3,
     shipsSunk: 0,
-    ships: [{locations: ["00", "", ""], hits: ["", "", ""]},
+    ships: [{locations: ["", "", ""], hits: ["", "", ""]},
             {locations: ["", "", ""], hits: ["", "", ""]},
             {locations: ["", "", ""], hits: ["", "", ""]}],
     fire: function(guess) {
@@ -111,8 +111,18 @@ var model = {
             }
         }
         return newShipLocations;
+    },
+    collision: function(locations) {
+        for (var i = 0; i < this.numShips; i++) {
+            var ship = model.ships[i];
+            for (var j = 0; j < locations.length; j++) {
+                if (ship.locations.indexOf(locations[j]) >= 0) {
+                    return true;
+                }
+            }
+        }
     }
-}
+};
 
 var controller = {
     guesses: 0,
@@ -144,17 +154,14 @@ var controller = {
             }
         }
     }
-
-}
-// controller.processGuess("A0");
-// controller.processGuess("0");
+};
 
 function init() {
     var fireButton = document.getElementById("fireButton");
     fireButton.onclick = handleFireButton;
     var guessInput = document.getElementById("guessInput");
     guessInput.onkeypress = handleKeyPress;
-
+    model.generateShipLocations();
 }
 function handleFireButton() {
     var guessInput = document.getElementById("guessInput");
