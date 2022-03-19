@@ -30,8 +30,8 @@ var isSunk = false;
 //         }
 //     }
 // }
-var stats = "You took "+guesses+" guesses to sink the battleship, " + "which means your shooting accuracy was "+ (3/guesses);
-alert (stats);
+// var stats = "You took " + guesses + " guesses to sink the battleship, " + "which means your shooting accuracy was "+ (3/guesses);
+// alert (stats);
 
 var view = {
     displayMessage: function(msg) {
@@ -53,7 +53,7 @@ var model = {
     numShips: 3,
     shipLength: 3,
     shipsSunk: 0,
-    ships: [{locations: ["", "", ""], hits: ["", "", ""]},
+    ships: [{locations: ["00", "", ""], hits: ["", "", ""]},
             {locations: ["", "", ""], hits: ["", "", ""]},
             {locations: ["", "", ""], hits: ["", "", ""]}],
     fire: function(guess) {
@@ -87,7 +87,7 @@ var model = {
 
 var controller = {
     guesses: 0,
-    processGuess: function(guess) {
+    parseGuess: function(guess) {
         var alphabet = ["A", "B", "C", "D", "E", "F", "G"];
         if (guess ===null || guess.length !== 2) {
             alert("Ooops, a letter and a number must to be on the board.");
@@ -104,15 +104,31 @@ var controller = {
             }
         }
         return null;
+    },
+    processGuess: function(guess) {
+        var location = this.parseGuess(guess);
+        if (location) {
+            this.guesses++;
+            var hit = model.fire(location);
+            if (hit && model.shipsSunk === model.numShips) {
+                view.displayMessage("You sank all my battleships, in " + this.guesses + " guesses");
+            }
+        }
     }
-}
 
-view.displayHit("34");
-view.displayHit("12");
-view.displayHit("26");
-view.displayMiss("00");
-view.displayMiss("55");
-view.displayMiss("25");
+}
+// controller.processGuess("A0");
+// controller.processGuess("0");
+
+function init() {
+    var fireButton = document.getElementById("fireButton");
+    fireButton.onclick = handleFireButton;
+}
+function handleFireButton() {
+    var guessInput = document.getElementById("guessInput");
+    var guess = guessInput.value;
+}
+window.onload = init;
 
 
 
